@@ -11,6 +11,8 @@ const Chat = ({ location }) => {
     name: "",
     room: "",
   });
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     const { name, room } = queryString.parse(location.search);
@@ -27,7 +29,41 @@ const Chat = ({ location }) => {
     };
   }, [ENDPOINT, location.search]);
 
-  return <h1>Chat</h1>;
+  useEffect(() => {
+    socket.on("message", (message) => {
+      setMessages([...messages, message]);
+    });
+  }, [messages]);
+
+  const handleMessage = (event) => {
+    setMessage(event.target.value);
+  };
+
+  const sendMessage = (event) => {
+    event.preventDefault();
+    if (message) socket.emit("sendMessage", message, () => setMessage(""));
+  };
+
+  console.log("message", message);
+  console.log("messages", messages);
+
+  return (
+    <div>
+      <h1>Chat</h1>
+      <ul>
+        {messages.map((x, i) => {
+          return <li key={i}>{`${x.user}: ${x.text}`}</li>;
+        })}
+      </ul>
+      <input
+        value={message}
+        onChange={handleMessage}
+        onKeyPress={(event) =>
+          event.key === "Enter" ? sendMessage(event) : null
+        }
+      />
+    </div>
+  );
 };
 
 export default Chat;
