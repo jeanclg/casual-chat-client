@@ -44,9 +44,6 @@ const Chat = ({ location }) => {
     if (message) socket.emit("sendMessage", message, () => setMessage(""));
   };
 
-  console.log("message", message);
-  console.log("messages", messages);
-
   return (
     <div>
       <h1>Chat</h1>
