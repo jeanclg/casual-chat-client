@@ -19,7 +19,7 @@ const Join = () => {
       <div className="container">
         <div className="d-flex vh-100 justify-content-center align-items-center text-center">
           <form>
-            <h1 className="fs-1">Join</h1>
+            <h1 className="fs-1">Casual Chat</h1>
             <div class="mb-3">
               <input
                 className="form-control"

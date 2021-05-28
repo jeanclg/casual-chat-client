@@ -73,7 +73,7 @@ const Chat = ({ location }) => {
             >{`${user.name}⠀⠀⠀⠀${user.room}`}</h2>
             <ScrollToBottom className={ROOT_CSS}>
               {messages.map((x, i) => {
-                if (x.user === user.name) {
+                if (x.user === user.name.toLowerCase()) {
                   return (
                     <p className="text-end" key={i}>
                       <strong>{x.user}</strong>
@@ -109,14 +109,17 @@ const Chat = ({ location }) => {
               </button>
             </div>
             <a href="/">
-              <button className="btn btn-danger">Leave</button>
+              <button className="btn btn-danger form-control">Leave</button>
             </a>
           </div>
-          <ul>
-            {users.map((x) => {
-              return <li key={x.id}>{x.name}</li>;
-            })}
-          </ul>
+          <div className="ms-5">
+            <h1 className="fs-5">Users Online</h1>
+            <ul>
+              {users.map((x) => {
+                return <li key={x.id}>{x.name}</li>;
+              })}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
