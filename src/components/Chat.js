@@ -6,8 +6,8 @@ import io from "socket.io-client";
 let socket;
 
 const Chat = ({ location }) => {
-  // const ENDPOINT = "https://casual-chat-server.herokuapp.com/";
-  const ENDPOINT = "localhost:5000";
+  const ENDPOINT = "https://casual-chat-server.herokuapp.com/";
+  // const ENDPOINT = "localhost:5000";
 
   const [user, setUser] = useState({
     name: "",
