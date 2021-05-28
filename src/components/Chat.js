@@ -4,16 +4,16 @@ import queryString from "query-string";
 import io from "socket.io-client";
 
 let socket;
-let users = [];
 
 const Chat = ({ location }) => {
-  const ENDPOINT = "https://casual-chat-server.herokuapp.com/";
-  // const ENDPOINT = "localhost:5000";
+  // const ENDPOINT = "https://casual-chat-server.herokuapp.com/";
+  const ENDPOINT = "localhost:5000";
 
   const [user, setUser] = useState({
     name: "",
     room: "",
   });
+  const [users, setUsers] = useState([]);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
@@ -25,19 +25,22 @@ const Chat = ({ location }) => {
       room,
     });
 
-    socket.emit("join", { name, room }, () => {});
-
-    return () => {
-      socket.emit("disconnect");
-      socket.off();
-    };
+    socket.emit("join", { name, room }, (error) => {
+      if (error) {
+        alert(error);
+      }
+    });
   }, [ENDPOINT, location.search]);
 
   useEffect(() => {
     socket.on("message", (message) => {
-      setMessages([...messages, message]);
+      setMessages((messages) => [...messages, message]);
     });
-  }, [messages]);
+
+    socket.on("roomData", ({ users }) => {
+      setUsers(users);
+    });
+  }, []);
 
   const handleMessage = (event) => {
     setMessage(event.target.value);
@@ -46,6 +49,7 @@ const Chat = ({ location }) => {
   const sendMessage = (event) => {
     event.preventDefault();
     if (message) socket.emit("sendMessage", message, () => setMessage(""));
+    console.log(users);
   };
 
   return (
@@ -53,9 +57,6 @@ const Chat = ({ location }) => {
       <h1>Chat</h1>
       <ul>
         {messages.map((x, i) => {
-          if (!users.includes(x.user)) {
-            users.push(x.user);
-          }
           return <li key={i}>{`${x.user}: ${x.text}`}</li>;
         })}
       </ul>
@@ -66,14 +67,14 @@ const Chat = ({ location }) => {
           event.key === "Enter" ? sendMessage(event) : null
         }
       />
+      <a href="/">
+        <button>Leave</button>
+      </a>
       <ul>
         {users.map((x) => {
-          return <p>{x}</p>;
+          return <li key={x.id}>{x.name}</li>;
         })}
       </ul>
-      <Link to="/">
-        <button>Leave</button>
-      </Link>
     </div>
   );
 };

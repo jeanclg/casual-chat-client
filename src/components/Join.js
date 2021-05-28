@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
 const Join = () => {
+  const ENDPOINT = "https://casual-chat-server.herokuapp.com/";
+  // const ENDPOINT = "localhost:5000";
+
   const [user, setUser] = useState({
     name: "",
     room: "",
