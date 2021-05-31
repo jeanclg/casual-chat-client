@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import queryString from "query-string";
 import io from "socket.io-client";
 import ScrollToBottom from "react-scroll-to-bottom";
@@ -8,6 +7,7 @@ import { css } from "@emotion/css";
 let socket;
 
 const Chat = ({ location }) => {
+  // URL do server
   const ENDPOINT = "https://casual-chat-server.herokuapp.com/";
   // const ENDPOINT = "localhost:5000";
 
@@ -20,8 +20,11 @@ const Chat = ({ location }) => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
+    // Pega o name e room passado pela URL no Join
     const { name, room } = queryString.parse(location.search);
+    // Instancia o socket.io no client
     socket = io(ENDPOINT);
+    // Atribui ao state usuario os valores passados pela URL
     setUser({
       name,
       room,
